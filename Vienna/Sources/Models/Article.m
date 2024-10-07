@@ -18,20 +18,18 @@
 //  limitations under the License.
 //
 
-
 #import "Article.h"
+
 #import "Database.h"
-#import "DateFormatterExtension.h"
-#import "StringExtensions.h"
-#import "HelperFunctions.h"
 #import "Folder.h"
+#import "StringExtensions.h"
 
 // The names here are internal field names, not for localisation.
 NSString * const MA_Field_GUID = @"GUID";
 NSString * const MA_Field_Subject = @"Subject";
 NSString * const MA_Field_Author = @"Author";
 NSString * const MA_Field_Link = @"Link";
-NSString * const MA_Field_Date = @"Date";
+NSString * const MA_Field_LastUpdate = @"Date";
 NSString * const MA_Field_Read = @"Read";
 NSString * const MA_Field_Flagged = @"Flagged";
 NSString * const MA_Field_Deleted = @"Deleted";
@@ -40,7 +38,7 @@ NSString * const MA_Field_Folder = @"Folder";
 NSString * const MA_Field_Parent = @"Parent";
 NSString * const MA_Field_Headlines = @"Headlines";
 NSString * const MA_Field_Summary = @"Summary";
-NSString * const MA_Field_CreatedDate = @"CreatedDate";
+NSString * const MA_Field_PublicationDate = @"PublicationDate";
 NSString * const MA_Field_Enclosure = @"Enclosure";
 NSString * const MA_Field_EnclosureDownloaded = @"EnclosureDownloaded";
 NSString * const MA_Field_HasEnclosure = @"HasEnclosure";
@@ -108,17 +106,17 @@ NSString * const MA_Field_HasEnclosure = @"HasEnclosure";
 /* setDate
  * Sets the date when the article was published.
  */
--(void)setDate:(NSDate *)newDate
+-(void)setLastUpdate:(NSDate *)lastUpdate
 {
-    articleData[MA_Field_Date] = [newDate copy];
+    articleData[MA_Field_LastUpdate] = lastUpdate;
 }
 
-/* setCreatedDate
- * Sets the date when the article was first created in the database.
+/*
+ * Sets the date when the article was first published or added to the database.
  */
--(void)setCreatedDate:(NSDate *)newCreatedDate
+- (void)setPublicationDate:(NSDate *)publicationDate
 {
-    articleData[MA_Field_CreatedDate] = [newCreatedDate copy];
+    articleData[MA_Field_PublicationDate] = publicationDate;
 }
 
 /* setBody
@@ -198,8 +196,10 @@ NSString * const MA_Field_HasEnclosure = @"HasEnclosure";
 {
     if ([keyPath hasPrefix:@"articleData."]) {
         NSString * key = [keyPath substringFromIndex:(@"articleData.").length];
-        if ([key isEqualToString:MA_Field_Date]) {
-            return self.date;
+        if ([key isEqualToString:MA_Field_LastUpdate]) {
+            return self.lastUpdate;
+        } else if ([key isEqualToString:MA_Field_PublicationDate]) {
+            return self.publicationDate;
         } else if ([key isEqualToString:MA_Field_Author]) {
             return self.author;
         } else if ([key isEqualToString:MA_Field_Subject]) {
@@ -243,8 +243,8 @@ NSString * const MA_Field_HasEnclosure = @"HasEnclosure";
     }
     return summary;
 }
--(NSDate *)date					{ return articleData[MA_Field_Date]; }
--(NSDate *)createdDate			{ return articleData[MA_Field_CreatedDate]; }
+-(NSDate *)lastUpdate			{ return articleData[MA_Field_LastUpdate]; }
+-(NSDate *)publicationDate		{ return articleData[MA_Field_PublicationDate]; }
 -(NSString *)body				{ return articleData[MA_Field_Text]; }
 -(NSString *)enclosure			{ return articleData[MA_Field_Enclosure]; }
 
@@ -308,96 +308,33 @@ NSString * const MA_Field_HasEnclosure = @"HasEnclosure";
     return nil;
 }
 
-/* tagArticleLink
- * Returns the article link as a safe string.
- */
--(NSString *)tagArticleLink
+// MARK: - NSDiscardableContent
+
+-(BOOL)beginContentAccess
 {
-    return cleanedUpUrlFromString(self.link).absoluteString;
+    return self.status != ArticleStatusDiscarded;
 }
 
-/* tagArticleTitle
- * Returns the article title.
- */
--(NSString *)tagArticleTitle
+- (void)endContentAccess
 {
-    NSMutableString * articleTitle = [NSMutableString stringWithString:SafeString([self title])];
-    [articleTitle vna_replaceString:@"$Article" withString:@"$_%$%_Article"];
-    [articleTitle vna_replaceString:@"$Feed" withString:@"$_%$%_Feed"];
-    return [NSString vna_stringByConvertingHTMLEntities:articleTitle];
+    // do nothing special,
+    // as we are not attempting to retrieve discarded content by ourself
+    // and don't manage any access count
 }
 
-/* tagArticleBody
- * Returns the article body.
- */
--(NSString *)tagArticleBody
+-(void)discardContentIfPossible
 {
-    NSMutableString * articleBody = [NSMutableString stringWithString:SafeString(self.body)];
-    [articleBody vna_replaceString:@"$Article" withString:@"$_%$%_Article"];
-    [articleBody vna_replaceString:@"$Feed" withString:@"$_%$%_Feed"];
-    [articleBody vna_fixupRelativeImgTags:self.link];
-    [articleBody vna_fixupRelativeIframeTags:self.link];
-    [articleBody vna_fixupRelativeAnchorTags:self.link];
-    return articleBody;
+    self.status = ArticleStatusDiscarded;
+    [articleData removeObjectForKey:MA_Field_Text];
+    [articleData removeObjectForKey:MA_Field_Summary];
+    [articleData removeObjectForKey:MA_Field_Author];
+    [articleData removeObjectForKey:MA_Field_LastUpdate];
+    [articleData removeObjectForKey:MA_Field_PublicationDate];
 }
 
-/* tagArticleAuthor
- * Returns the article author as a safe string.
- */
--(NSString *)tagArticleAuthor
+- (BOOL)isContentDiscarded
 {
-    return SafeString([self author]);
-}
-
-/* tagArticleDate
- * Returns the article date.
- */
--(NSString *)tagArticleDate
-{
-    return [NSDateFormatter vna_relativeDateStringFromDate:self.date];
-}
-
-/* tagArticleEnclosureLink
- * Returns the article enclosure link.
- */
--(NSString *)tagArticleEnclosureLink
-{
-    return cleanedUpUrlFromString(self.enclosure).absoluteString;
-}
-
-/* tagArticleEnclosureFilename
- * Returns the article enclosure file name.
- */
--(NSString *)tagArticleEnclosureFilename
-{
-    return [self.enclosure.lastPathComponent stringByRemovingPercentEncoding];
-}
-
-/* tagFeedTitle
- * Returns the article's feed title.
- */
--(NSString *)tagFeedTitle
-{
-    Folder * folder = [[Database sharedManager] folderFromID:self.folderId];
-    return [NSString vna_stringByConvertingHTMLEntities:SafeString([folder name])];
-}
-
-/* tagFeedLink
- * Returns the article's feed URL.
- */
--(NSString *)tagFeedLink
-{
-    Folder * folder = [[Database sharedManager] folderFromID:self.folderId];
-    return cleanedUpUrlFromString(folder.homePage).absoluteString;
-}
-
-/* tagFeedDescription
- * Returns the article's feed description.
- */
--(NSString *)tagFeedDescription
-{
-    Folder * folder = [[Database sharedManager] folderFromID:self.folderId];
-    return folder.feedDescription;
+    return self.status == ArticleStatusDiscarded;
 }
 
 @end

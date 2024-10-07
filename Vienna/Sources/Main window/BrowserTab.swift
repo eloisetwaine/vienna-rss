@@ -18,7 +18,7 @@
 //
 
 import Cocoa
-import WebKit
+@preconcurrency import WebKit
 
 // MARK: State
 
@@ -338,6 +338,24 @@ extension BrowserTab: Tab {
 // MARK: Webview navigation
 
 extension BrowserTab: WKNavigationDelegate {
+
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if navigationAction.navigationType == .linkActivated {
+            let commandKey = navigationAction.modifierFlags.contains(.command)
+            let optionKey = navigationAction.modifierFlags.contains(.option)
+            if commandKey {
+                decisionHandler(.cancel)
+                NSApp.appController.browser.createNewTabAfterSelected(navigationAction.request.url, inBackground: true, load: true)
+            } else if optionKey {
+                decisionHandler(.cancel)
+                NSApp.appController.open(navigationAction.request.url, inPreferredBrowser: false)
+            } else {
+                decisionHandler(.allow)
+            }
+        } else {
+            decisionHandler(.allow)
+        }
+    }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         if navigationResponse.canShowMIMEType {

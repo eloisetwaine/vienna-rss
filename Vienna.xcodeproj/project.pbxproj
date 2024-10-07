@@ -190,12 +190,13 @@
 		F68792872700A678009B7BB5 /* SecurityScopedBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68792862700A678009B7BB5 /* SecurityScopedBookmark.swift */; };
 		F689820A281DD62B0010F4C5 /* XMLFeed.m in Sources */ = {isa = PBXBuildFile; fileRef = F6898209281DD62B0010F4C5 /* XMLFeed.m */; };
 		F68DEBF82A35091600421FAB /* DispatchTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68DEBF72A35091600421FAB /* DispatchTimer.swift */; };
-		F68FE3A6270F6DC700C89D16 /* UnarchiverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68FE3A5270F6DC700C89D16 /* UnarchiverTests.swift */; settings = {COMPILER_FLAGS = "-Wno-deprecated-type -Wno-deprecated-declarations"; }; };
+		F68FE3A6270F6DC700C89D16 /* UnarchiverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68FE3A5270F6DC700C89D16 /* UnarchiverTests.swift */; };
 		F69140E41E71B94200D51BFF /* AppController+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = F69140E31E71B94200D51BFF /* AppController+Notifications.m */; };
 		F692559A2572A32900D387D8 /* MMTabBarView in Frameworks */ = {isa = PBXBuildFile; productRef = F69255992572A32900D387D8 /* MMTabBarView */; };
 		F696D23E2561F9FC003DF0C0 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = F696D23D2561F9FC003DF0C0 /* Sparkle */; };
 		F69964F71F13029600FC8493 /* OverlayStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69964F61F13029500FC8493 /* OverlayStatusBar.swift */; };
 		F6A179D326B82BE3008DDA42 /* NSFileManagerExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A179D226B82BE3008DDA42 /* NSFileManagerExtensionTests.swift */; };
+		F6A243E12C69E534000A006F /* Article+Tags.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A243E02C69E534000A006F /* Article+Tags.m */; };
 		F6A464BC272F47BE0071E3F6 /* NSKeyedUnarchiver+Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A464BA272F47BE0071E3F6 /* NSKeyedUnarchiver+Compatibility.m */; };
 		F6A464BD272F47BE0071E3F6 /* NSKeyedArchiver+Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A464BB272F47BE0071E3F6 /* NSKeyedArchiver+Compatibility.m */; };
 		F6A4E8481F040D58001C9191 /* PlugInToolbarItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A4E8471F040D58001C9191 /* PlugInToolbarItemButton.swift */; };
@@ -207,10 +208,10 @@
 		F6A7DE4A1E4717970017BE5E /* shared in Resources */ = {isa = PBXBuildFile; fileRef = F6A7DE491E4717970017BE5E /* shared */; };
 		F6A7DE4F1E471A7F0017BE5E /* Vienna.help in Resources */ = {isa = PBXBuildFile; fileRef = F6A7DDCA1E470E980017BE5E /* Vienna.help */; };
 		F6AC41AC25A4FAF6007DED7B /* FeedDiscovererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AC41AB25A4FAF6007DED7B /* FeedDiscovererTests.swift */; };
+		F6AFC16D2CAFCD2E00106E80 /* SettingsTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AFC16C2CAFCD2E00106E80 /* SettingsTabViewController.swift */; };
 		F6B059E02961D0A100F6E31B /* JSONFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B059DF2961D0A000F6E31B /* JSONFeed.swift */; };
 		F6B059E22961D0A800F6E31B /* JSONFeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B059E12961D0A800F6E31B /* JSONFeedItem.swift */; };
 		F6B059E42961D0DD00F6E31B /* JSONFeedParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B059E32961D0DD00F6E31B /* JSONFeedParser.swift */; };
-		F6B355DB256025D3008CA1ED /* PreferenceTabViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B355DA256025D3008CA1ED /* PreferenceTabViewItem.swift */; };
 		F6B3561525616313008CA1ED /* DownloadItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B3561425616313008CA1ED /* DownloadItem.m */; };
 		F6B7BC3624A2A9A40051D76F /* FMDB in Frameworks */ = {isa = PBXBuildFile; productRef = F6B7BC3524A2A9A40051D76F /* FMDB */; };
 		F6C9DA70271BB3BB00FC3027 /* RSSFeed.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C9DA6F271BB3BB00FC3027 /* RSSFeed.m */; };
@@ -421,7 +422,7 @@
 		4398241A1666B37000FFE219 /* Changes-and-Notes.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "Changes-and-Notes.sh"; path = "Scripts/Changes-and-Notes.sh"; sourceTree = SOURCE_ROOT; };
 		4398241C1666B37000FFE219 /* Release-for-upload.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "Release-for-upload.sh"; path = "Scripts/Release-for-upload.sh"; sourceTree = SOURCE_ROOT; };
 		4398241E1666B3DB00FFE219 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = SOURCE_ROOT; };
-		439824201666B3DB00FFE219 /* CHANGES */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGES; sourceTree = SOURCE_ROOT; };
+		439824201666B3DB00FFE219 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
 		439824221666B3DB00FFE219 /* notes.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = notes.html; sourceTree = SOURCE_ROOT; };
 		439824231666B3DB00FFE219 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
 		439824241666B3DB00FFE219 /* Release Instructions.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "Release Instructions.md"; sourceTree = SOURCE_ROOT; };
@@ -564,6 +565,8 @@
 		F69964F61F13029500FC8493 /* OverlayStatusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayStatusBar.swift; sourceTree = "<group>"; };
 		F69AE7E91F2224F500342640 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = da; path = da.lproj/RSSSources.plist; sourceTree = "<group>"; };
 		F6A179D226B82BE3008DDA42 /* NSFileManagerExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFileManagerExtensionTests.swift; sourceTree = "<group>"; };
+		F6A243DF2C69E534000A006F /* Article+Tags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Article+Tags.h"; sourceTree = "<group>"; };
+		F6A243E02C69E534000A006F /* Article+Tags.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Article+Tags.m"; sourceTree = "<group>"; };
 		F6A464B8272F47BE0071E3F6 /* NSKeyedUnarchiver+Compatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSKeyedUnarchiver+Compatibility.h"; sourceTree = "<group>"; };
 		F6A464B9272F47BE0071E3F6 /* NSKeyedArchiver+Compatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSKeyedArchiver+Compatibility.h"; sourceTree = "<group>"; };
 		F6A464BA272F47BE0071E3F6 /* NSKeyedUnarchiver+Compatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSKeyedUnarchiver+Compatibility.m"; sourceTree = "<group>"; };
@@ -583,6 +586,7 @@
 		F6A7DE551E471D700017BE5E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = fr; path = fr.lproj/Vienna.html; sourceTree = "<group>"; };
 		F6A7DE571E471D790017BE5E /* it */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = it; path = it.lproj/Vienna.html; sourceTree = "<group>"; };
 		F6A7DE5A1E471D7E0017BE5E /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = nl; path = nl.lproj/Vienna.html; sourceTree = "<group>"; };
+		F6A7DE5E1E471D870017BE5E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = sv; path = sv.lproj/Vienna.html; sourceTree = "<group>"; };
 		F6A7DE611E471D8C0017BE5E /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = "zh-Hant"; path = "zh-Hant.lproj/Vienna.html"; sourceTree = "<group>"; };
 		F6A7DE641E471D990017BE5E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = da; path = da.lproj/intro.html; sourceTree = "<group>"; };
 		F6A7DE651E471D9B0017BE5E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = de; path = de.lproj/intro.html; sourceTree = "<group>"; };
@@ -590,6 +594,7 @@
 		F6A7DE681E471DA00017BE5E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = fr; path = fr.lproj/intro.html; sourceTree = "<group>"; };
 		F6A7DE6A1E471DA40017BE5E /* it */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = it; path = it.lproj/intro.html; sourceTree = "<group>"; };
 		F6A7DE6D1E471DCE0017BE5E /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = nl; path = nl.lproj/intro.html; sourceTree = "<group>"; };
+		F6A7DE711E471DD50017BE5E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = sv; path = sv.lproj/intro.html; sourceTree = "<group>"; };
 		F6A7DE741E471DDA0017BE5E /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = "zh-Hant"; path = "zh-Hant.lproj/intro.html"; sourceTree = "<group>"; };
 		F6A7DE771E471DE70017BE5E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = da; path = da.lproj/keyboard.html; sourceTree = "<group>"; };
 		F6A7DE781E471DE80017BE5E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = de; path = de.lproj/keyboard.html; sourceTree = "<group>"; };
@@ -597,6 +602,7 @@
 		F6A7DE7B1E471DED0017BE5E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = fr; path = fr.lproj/keyboard.html; sourceTree = "<group>"; };
 		F6A7DE7D1E471DF00017BE5E /* it */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = it; path = it.lproj/keyboard.html; sourceTree = "<group>"; };
 		F6A7DE801E471DFB0017BE5E /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = nl; path = nl.lproj/keyboard.html; sourceTree = "<group>"; };
+		F6A7DE841E471E000017BE5E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = sv; path = sv.lproj/keyboard.html; sourceTree = "<group>"; };
 		F6A7DE871E471E040017BE5E /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = "zh-Hant"; path = "zh-Hant.lproj/keyboard.html"; sourceTree = "<group>"; };
 		F6A7DE8A1E471E0B0017BE5E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = da; path = da.lproj/faq.html; sourceTree = "<group>"; };
 		F6A7DE8B1E471E0D0017BE5E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = de; path = de.lproj/faq.html; sourceTree = "<group>"; };
@@ -604,6 +610,7 @@
 		F6A7DE8E1E471E130017BE5E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = fr; path = fr.lproj/faq.html; sourceTree = "<group>"; };
 		F6A7DE901E471E180017BE5E /* it */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = it; path = it.lproj/faq.html; sourceTree = "<group>"; };
 		F6A7DE931E471E1D0017BE5E /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = nl; path = nl.lproj/faq.html; sourceTree = "<group>"; };
+		F6A7DE971E471E230017BE5E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = sv; path = sv.lproj/faq.html; sourceTree = "<group>"; };
 		F6A7DE9A1E471E280017BE5E /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = "zh-Hant"; path = "zh-Hant.lproj/faq.html"; sourceTree = "<group>"; };
 		F6A7DE9D1E471E2F0017BE5E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = da; path = da.lproj/advanced.html; sourceTree = "<group>"; };
 		F6A7DE9E1E471E310017BE5E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = de; path = de.lproj/advanced.html; sourceTree = "<group>"; };
@@ -611,16 +618,21 @@
 		F6A7DEA11E471E350017BE5E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = fr; path = fr.lproj/advanced.html; sourceTree = "<group>"; };
 		F6A7DEA31E471E380017BE5E /* it */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = it; path = it.lproj/advanced.html; sourceTree = "<group>"; };
 		F6A7DEA61E471E3C0017BE5E /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = nl; path = nl.lproj/advanced.html; sourceTree = "<group>"; };
+		F6A7DEAA1E471E410017BE5E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = sv; path = sv.lproj/advanced.html; sourceTree = "<group>"; };
 		F6A7DEAD1E471E450017BE5E /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = "zh-Hant"; path = "zh-Hant.lproj/advanced.html"; sourceTree = "<group>"; };
 		F6AC41AB25A4FAF6007DED7B /* FeedDiscovererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDiscovererTests.swift; sourceTree = "<group>"; };
+		F6AFC16C2CAFCD2E00106E80 /* SettingsTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTabViewController.swift; sourceTree = "<group>"; };
 		F6B059DF2961D0A000F6E31B /* JSONFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONFeed.swift; sourceTree = "<group>"; };
 		F6B059E12961D0A800F6E31B /* JSONFeedItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONFeedItem.swift; sourceTree = "<group>"; };
 		F6B059E32961D0DD00F6E31B /* JSONFeedParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONFeedParser.swift; sourceTree = "<group>"; };
 		F6B1233E1E474D2A00973699 /* IndexHelpbook.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = IndexHelpbook.sh; sourceTree = "<group>"; };
-		F6B355DA256025D3008CA1ED /* PreferenceTabViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceTabViewItem.swift; sourceTree = "<group>"; };
 		F6B3561325616302008CA1ED /* DownloadItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadItem.h; sourceTree = "<group>"; };
 		F6B3561425616313008CA1ED /* DownloadItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadItem.m; sourceTree = "<group>"; };
 		F6B76B43284B492E009961AD /* NSPredicateEditor+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSPredicateEditor+Private.h"; sourceTree = "<group>"; };
+		F6BD1FD82C9D7DD40075D04F /* .clang-format */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".clang-format"; sourceTree = "<group>"; };
+		F6BD1FDA2C9D7DD40075D04F /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		F6BD1FDC2C9D7E230075D04F /* CONTRIBUTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
+		F6BD1FDD2C9D7E2E0075D04F /* LICENCE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENCE.md; sourceTree = "<group>"; };
 		F6C9DA6E271BB3BB00FC3027 /* RSSFeed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSSFeed.h; sourceTree = "<group>"; };
 		F6C9DA6F271BB3BB00FC3027 /* RSSFeed.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSSFeed.m; sourceTree = "<group>"; };
 		F6C9DA71271BB55000FC3027 /* AtomFeed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AtomFeed.h; sourceTree = "<group>"; };
@@ -643,6 +655,7 @@
 		F6EB26021E58D37100570B22 /* DirectoryMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectoryMonitor.swift; sourceTree = "<group>"; };
 		F6F12AFB25ABDDE3005B2DCE /* NSFileManager+Paths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSFileManager+Paths.h"; sourceTree = "<group>"; };
 		F6F12AFC25ABDDE3005B2DCE /* NSFileManager+Paths.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSFileManager+Paths.m"; sourceTree = "<group>"; };
+		F6FEBCFE2CA06980005E3788 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Predicates.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -697,7 +710,7 @@
 				035B703519E0E4AE00197334 /* Vienna Tests.xctest */,
 			);
 			name = Products;
-			sourceTree = SOURCE_ROOT;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2A37F4AAFDCFA73011CA2CEA /* Vienna */ = {
 			isa = PBXGroup;
@@ -708,8 +721,9 @@
 				035B703619E0E4AE00197334 /* Vienna Tests */,
 				F636FEBB2A39031B002AD931 /* Packages */,
 				F63B7D701F1CD001002F71BF /* External */,
-				19C28FB0FE9D524F11CA2CBB /* Products */,
 				439824171666B31700FFE219 /* Scripts */,
+				F6BD1FD72C9D7D9D0075D04F /* Configs */,
+				19C28FB0FE9D524F11CA2CBB /* Products */,
 			);
 			indentWidth = 4;
 			name = Vienna;
@@ -724,6 +738,8 @@
 				2F88B2A42545BB450067EEA6 /* ArticleConverter.h */,
 				2F88B2A52545BB450067EEA6 /* ArticleConverter.m */,
 				2FC4A1BE25852C0E005FF227 /* ArticleConverter.swift */,
+				F6A243DF2C69E534000A006F /* Article+Tags.h */,
+				F6A243E02C69E534000A006F /* Article+Tags.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -832,10 +848,12 @@
 			isa = PBXGroup;
 			children = (
 				4398241E1666B3DB00FFE219 /* Credits.rtf */,
-				439824201666B3DB00FFE219 /* CHANGES */,
+				439824201666B3DB00FFE219 /* CHANGELOG.md */,
 				439824221666B3DB00FFE219 /* notes.html */,
-				439824231666B3DB00FFE219 /* README.md */,
 				439824241666B3DB00FFE219 /* Release Instructions.md */,
+				439824231666B3DB00FFE219 /* README.md */,
+				F6BD1FDD2C9D7E2E0075D04F /* LICENCE.md */,
+				F6BD1FDC2C9D7E230075D04F /* CONTRIBUTING.md */,
 			);
 			name = Documentation;
 			sourceTree = "<group>";
@@ -1048,6 +1066,15 @@
 			path = Files;
 			sourceTree = "<group>";
 		};
+		F6BD1FD72C9D7D9D0075D04F /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				F6BD1FD82C9D7DD40075D04F /* .clang-format */,
+				F6BD1FDA2C9D7DD40075D04F /* .swiftlint.yml */,
+			);
+			name = Configs;
+			sourceTree = "<group>";
+		};
 		F6C9DA74271BBA4800FC3027 /* XML-based feeds */ = {
 			isa = PBXGroup;
 			children = (
@@ -1140,6 +1167,7 @@
 			children = (
 				AA9FE2EB08BC133600A9E977 /* Preferences.h */,
 				AA9FE2EC08BC133600A9E977 /* Preferences.m */,
+				F6AFC16C2CAFCD2E00106E80 /* SettingsTabViewController.swift */,
 				0349813C1A206FD900014F29 /* GeneralPreferencesViewController.h */,
 				0349813D1A206FD900014F29 /* GeneralPreferencesViewController.m */,
 				B85F93E4255AE48000B54B68 /* NSPopUpButtonExtensions.swift */,
@@ -1151,7 +1179,6 @@
 				F672876724A2D2170043432F /* UpdatePreferencesViewController.m */,
 				0349813F1A20701600014F29 /* AdvancedPreferencesViewController.h */,
 				034981401A20701600014F29 /* AdvancedPreferencesViewController.m */,
-				F6B355DA256025D3008CA1ED /* PreferenceTabViewItem.swift */,
 				F68792862700A678009B7BB5 /* SecurityScopedBookmark.swift */,
 			);
 			path = "Preferences window";
@@ -1407,7 +1434,7 @@
 				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = VNA;
 				LastSwiftUpdateCheck = 1410;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1600;
 				ORGANIZATIONNAME = "Vienna project";
 				TargetAttributes = {
 					035B703419E0E4AE00197334 = {
@@ -1461,7 +1488,6 @@
 				F69255982572A32900D387D8 /* XCRemoteSwiftPackageReference "MMTabBarView" */,
 				F696D23C2561F9FC003DF0C0 /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
-			productRefGroup = 19C28FB0FE9D524F11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -1803,15 +1829,16 @@
 				435028AC165DE9E00018EDB7 /* NewSubscription.m in Sources */,
 				2F88FF432969FC530076B99E /* DateWithUnitPredicateEditorRowTemplate.swift in Sources */,
 				F6EB26031E58D37100570B22 /* DirectoryMonitor.swift in Sources */,
+				F6A243E12C69E534000A006F /* Article+Tags.m in Sources */,
 				435028AD165DE9E00018EDB7 /* PluginManager.m in Sources */,
 				B81B536425565CD700C65459 /* Constants.swift in Sources */,
 				435028AE165DE9E00018EDB7 /* ProgressTextCell.m in Sources */,
 				793C95331C42A0DD00984D4E /* FoldersFilterable.m in Sources */,
 				3AB95743258DBC5A00C54E83 /* Browser.swift in Sources */,
 				435028AF165DE9E00018EDB7 /* RefreshManager.m in Sources */,
+				F6AFC16D2CAFCD2E00106E80 /* SettingsTabViewController.swift in Sources */,
 				435028B0165DE9E00018EDB7 /* SmartFolder.m in Sources */,
 				435028B1165DE9E00018EDB7 /* SearchMethod.m in Sources */,
-				F6B355DB256025D3008CA1ED /* PreferenceTabViewItem.swift in Sources */,
 				435028B2165DE9E00018EDB7 /* SearchPanel.m in Sources */,
 				435028B3165DE9E00018EDB7 /* EnclosureView.m in Sources */,
 				2FDF6FC8218A289A002F77E9 /* Tab.swift in Sources */,
@@ -1972,6 +1999,7 @@
 				F66A7E542A019006002F5D5E /* fr */,
 				F698E6FF29E9D1CA00D49475 /* nl */,
 				F6232EF72B4B402F00D01D2A /* sv */,
+				F6FEBCFE2CA06980005E3788 /* es */,
 			);
 			name = Predicates.strings;
 			sourceTree = "<group>";
@@ -1987,6 +2015,7 @@
 				F6A7DEA31E471E380017BE5E /* it */,
 				F6A7DEA61E471E3C0017BE5E /* nl */,
 				F6A7DEAD1E471E450017BE5E /* zh-Hant */,
+				F6A7DEAA1E471E410017BE5E /* sv */,
 			);
 			indentWidth = 2;
 			name = advanced.html;
@@ -2003,6 +2032,7 @@
 				F6A7DE901E471E180017BE5E /* it */,
 				F6A7DE931E471E1D0017BE5E /* nl */,
 				F6A7DE9A1E471E280017BE5E /* zh-Hant */,
+				F6A7DE971E471E230017BE5E /* sv */,
 			);
 			indentWidth = 2;
 			name = faq.html;
@@ -2019,6 +2049,7 @@
 				F6A7DE6A1E471DA40017BE5E /* it */,
 				F6A7DE6D1E471DCE0017BE5E /* nl */,
 				F6A7DE741E471DDA0017BE5E /* zh-Hant */,
+				F6A7DE711E471DD50017BE5E /* sv */,
 			);
 			indentWidth = 2;
 			name = intro.html;
@@ -2035,6 +2066,7 @@
 				F6A7DE7D1E471DF00017BE5E /* it */,
 				F6A7DE801E471DFB0017BE5E /* nl */,
 				F6A7DE871E471E040017BE5E /* zh-Hant */,
+				F6A7DE841E471E000017BE5E /* sv */,
 			);
 			indentWidth = 2;
 			name = keyboard.html;
@@ -2051,6 +2083,7 @@
 				F6A7DE571E471D790017BE5E /* it */,
 				F6A7DE5A1E471D7E0017BE5E /* nl */,
 				F6A7DE611E471D8C0017BE5E /* zh-Hant */,
+				F6A7DE5E1E471D870017BE5E /* sv */,
 			);
 			indentWidth = 2;
 			name = Vienna.html;
@@ -2107,7 +2140,6 @@
 		035B703D19E0E4AE00197334 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2165,7 +2197,6 @@
 		035B703E19E0E4AE00197334 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";

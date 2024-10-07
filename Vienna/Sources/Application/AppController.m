@@ -402,7 +402,11 @@ static void *VNAAppControllerObserverContext = &VNAAppControllerObserverContext;
         alert.messageText = NSLocalizedString(@"One or more downloads are in progress", @"Message text of an alert");
         alert.informativeText = NSLocalizedString(@"If you quit Vienna now, all downloads will stop.", @"Message text of an alert");
         [alert addButtonWithTitle:NSLocalizedString(@"Quit", @"Title of a button on an alert")];
-        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Title of a button on an alert")];
+        [alert addButtonWithTitle:NSLocalizedStringWithDefaultValue(@"cancel.button",
+                                                                    nil,
+                                                                    NSBundle.mainBundle,
+                                                                    @"Cancel",
+                                                                    @"Title of a button on an alert")];
         NSModalResponse alertResponse = [alert runModal];
 
         if (alertResponse == NSAlertSecondButtonReturn) {
@@ -515,6 +519,14 @@ static void *VNAAppControllerObserverContext = &VNAAppControllerObserverContext;
 	[db close];
 }
 
+/* applicationSupportsSecureRestorableState [delegate]
+ */
+-(BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app
+{
+    // We do not use override NSApplication delegate `initWithCoder` method, nor the methods
+    // for restoring application state, so we are fine with SecureCoding.
+    return YES;
+}
 
 /* openFile [delegate]
  * Called when the user opens a data file associated with Vienna by clicking in the finder or dragging it onto the dock.
@@ -557,7 +569,11 @@ static void *VNAAppControllerObserverContext = &VNAAppControllerObserverContext;
         alert.messageText = NSLocalizedString(@"Import subscriptions from OPML file?", nil);
         alert.informativeText = NSLocalizedString(@"Do you really want to import the subscriptions from the specified OPML file?", nil);
         [alert addButtonWithTitle:NSLocalizedString(@"Import", @"Title of a button on an alert")];
-        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Title of a button on an alert")];
+        [alert addButtonWithTitle:NSLocalizedStringWithDefaultValue(@"cancel.button",
+                                                                    nil,
+                                                                    NSBundle.mainBundle,
+                                                                    @"Cancel",
+                                                                    @"Title of a button on an alert")];
         NSModalResponse alertResponse = [alert runModal];
 
         if (alertResponse == NSAlertFirstButtonReturn) {
@@ -1143,15 +1159,15 @@ withReplyEvent:(NSAppleEventDescriptor *)replyEvent
 	for (Field * field in [db arrayOfFields]) {
 		// Filter out columns we don't sort on. Later we should have an attribute in the
 		// field object itself based on which columns we can sort on.
-		if (field.tag != ArticleFieldIDParent &&
-			field.tag != ArticleFieldIDGUID &&
-			field.tag != ArticleFieldIDDeleted &&
-			field.tag != ArticleFieldIDHeadlines &&
-			field.tag != ArticleFieldIDSummary &&
-			field.tag != ArticleFieldIDLink &&
-			field.tag != ArticleFieldIDText &&
-			field.tag != ArticleFieldIDEnclosureDownloaded &&
-			field.tag != ArticleFieldIDEnclosure)
+		if (field.tag != VNAArticleFieldTagParent &&
+			field.tag != VNAArticleFieldTagGUID &&
+			field.tag != VNAArticleFieldTagDeleted &&
+			field.tag != VNAArticleFieldTagHeadlines &&
+			field.tag != VNAArticleFieldTagSummary &&
+			field.tag != VNAArticleFieldTagLink &&
+			field.tag != VNAArticleFieldTagText &&
+			field.tag != VNAArticleFieldTagEnclosureDownloaded &&
+			field.tag != VNAArticleFieldTagEnclosure)
 		{
 			NSMenuItem * menuItem = [[NSMenuItem alloc] initWithTitle:field.displayName action:@selector(doSortColumn:) keyEquivalent:@""];
 			menuItem.representedObject = field;
@@ -1184,12 +1200,12 @@ withReplyEvent:(NSAppleEventDescriptor *)replyEvent
 	for (Field * field in [db arrayOfFields]) {
 		// Filter out columns we don't view in the article list. Later we should have an attribute in the
 		// field object based on which columns are visible in the tableview.
-		if (field.tag != ArticleFieldIDText && 
-			field.tag != ArticleFieldIDGUID &&
-			field.tag != ArticleFieldIDDeleted &&
-			field.tag != ArticleFieldIDParent &&
-			field.tag != ArticleFieldIDHeadlines &&
-			field.tag != ArticleFieldIDEnclosureDownloaded)
+		if (field.tag != VNAArticleFieldTagText && 
+			field.tag != VNAArticleFieldTagGUID &&
+			field.tag != VNAArticleFieldTagDeleted &&
+			field.tag != VNAArticleFieldTagParent &&
+			field.tag != VNAArticleFieldTagHeadlines &&
+			field.tag != VNAArticleFieldTagEnclosureDownloaded)
 		{
 			NSMenuItem * menuItem = [[NSMenuItem alloc] initWithTitle:field.displayName action:@selector(doViewColumn:) keyEquivalent:@""];
 			menuItem.representedObject = field;
@@ -1395,7 +1411,11 @@ withReplyEvent:(NSAppleEventDescriptor *)replyEvent
     alert.messageText = NSLocalizedString(@"Are you sure you want to delete the messages in the Trash folder permanently?", nil);
     alert.informativeText = NSLocalizedString(@"You cannot undo this action", nil);
     [alert addButtonWithTitle:NSLocalizedString(@"Empty", @"Title of a button on an alert")];
-    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Title of a button on an alert")];
+    [alert addButtonWithTitle:NSLocalizedStringWithDefaultValue(@"cancel.button",
+                                                                nil,
+                                                                NSBundle.mainBundle,
+                                                                @"Cancel",
+                                                                @"Title of a button on an alert")];
     [alert beginSheetModalForWindow:self.mainWindow completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSAlertFirstButtonReturn) {
             [self clearUndoStack];
@@ -1501,7 +1521,11 @@ withReplyEvent:(NSAppleEventDescriptor *)replyEvent
 								 action:@selector(markAllSubscriptionsRead:)
 						  keyEquivalent:@""];
         [statusBarMenu addItem:[NSMenuItem separatorItem]];
-        [statusBarMenu addItemWithTitle:NSLocalizedString(@"Quit Vienna", @"Title of a menu item")
+        [statusBarMenu addItemWithTitle:NSLocalizedStringWithDefaultValue(@"quitVienna.menuItem",
+                                                                          nil,
+                                                                          NSBundle.mainBundle,
+                                                                          @"Quit Vienna",
+                                                                          @"Title of a menu item")
                                  action:@selector(terminate:)
                           keyEquivalent:@""];
 		appStatusItem.menu = statusBarMenu;
@@ -1764,10 +1788,6 @@ withReplyEvent:(NSAppleEventDescriptor *)replyEvent
 -(void)handleRefreshStatusChange:(NSNotification *)nc
 {
 	if (self.connecting) {
-		// Save the date/time of this refresh so we do the right thing when
-		// we apply the filter.
-		[[Preferences standardPreferences] setObject:[NSDate date] forKey:MAPref_LastRefreshDate];
-		
 		// Toggle the refresh button
 		NSToolbarItem *item = [self toolbarItemWithIdentifier:@"Refresh"];
 		item.action = @selector(cancelAllRefreshesToolbar:);
@@ -2207,8 +2227,16 @@ withReplyEvent:(NSAppleEventDescriptor *)replyEvent
             NSAlert *alert = [NSAlert new];
             alert.messageText = NSLocalizedString(@"Are you sure you want to permanently delete the selected articles?", nil);
             alert.informativeText = NSLocalizedString(@"This operation cannot be undone.", nil);
-            [alert addButtonWithTitle:NSLocalizedString(@"Delete", @"Title of a button on an alert")];
-            [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Title of a button on an alert")];
+            [alert addButtonWithTitle:NSLocalizedStringWithDefaultValue(@"delete.button",
+                                                                        nil,
+                                                                        NSBundle.mainBundle,
+                                                                        @"Delete",
+                                                                        @"Title of a button on an alert")];
+            [alert addButtonWithTitle:NSLocalizedStringWithDefaultValue(@"cancel.button",
+                                                                        nil,
+                                                                        NSBundle.mainBundle,
+                                                                        @"Cancel",
+                                                                        @"Title of a button on an alert")];
             [alert beginSheetModalForWindow:self.mainWindow completionHandler:^(NSModalResponse returnCode) {
                 if (returnCode == NSAlertFirstButtonReturn) {
                     NSArray *articleArray = self.articleController.markedArticleRange;
@@ -2410,8 +2438,16 @@ withReplyEvent:(NSAppleEventDescriptor *)replyEvent
         NSAlert *alert = [NSAlert new];
         alert.messageText = alertTitle;
         alert.informativeText = alertBody;
-        [alert addButtonWithTitle:NSLocalizedString(@"Delete", @"Title of a button on an alert")];
-        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Title of a button on an alert")];
+        [alert addButtonWithTitle:NSLocalizedStringWithDefaultValue(@"delete.button",
+                                                                    nil,
+                                                                    NSBundle.mainBundle,
+                                                                    @"Delete",
+                                                                    @"Title of a button on an alert")];
+        [alert addButtonWithTitle:NSLocalizedStringWithDefaultValue(@"cancel.button",
+                                                                    nil,
+                                                                    NSBundle.mainBundle,
+                                                                    @"Cancel",
+                                                                    @"Title of a button on an alert")];
         NSModalResponse alertResponse = [alert runModal];
 
 		if (alertResponse == NSAlertSecondButtonReturn) {
@@ -3221,7 +3257,11 @@ withReplyEvent:(NSAppleEventDescriptor *)replyEvent
 	} else if (theAction == @selector(deleteFolder:)) {
 		Folder * folder = [db folderFromID:self.foldersTree.actualSelection];
 		if (folder.type == VNAFolderTypeSearch) {
-			[menuItem setTitle:NSLocalizedString(@"Delete", @"Title of a menu item")];
+			menuItem.title = NSLocalizedStringWithDefaultValue(@"delete.menuItem",
+															   nil,
+															   NSBundle.mainBundle,
+															   @"Delete",
+															   @"Title of a menu item");
 		} else {
 			[menuItem setTitle:NSLocalizedString(@"Delete…", @"Title of a menu item")];
 		}

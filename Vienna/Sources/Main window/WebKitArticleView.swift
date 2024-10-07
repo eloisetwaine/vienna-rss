@@ -67,7 +67,19 @@ class WebKitArticleView: CustomWKWebView, ArticleContentView, WKNavigationDelega
 
     /// handle special keys when the article view has the focus
     override func keyDown(with event: NSEvent) {
-        if let pressedKeys = event.characters, pressedKeys.count == 1 {
+        var interceptKey = true
+        waitForAsyncExecution(until: DispatchTime.now() + DispatchTimeInterval.milliseconds(200)) { finishHandler in
+            self.evaluateJavaScript("document.activeElement.tagName") { res, _ in
+                guard let res = res as? String else {
+                    return
+                }
+                if ["INPUT", "TEXTAREA"].contains(res) {
+                    interceptKey = false
+                }
+                finishHandler()
+            }
+        }
+        if interceptKey, let pressedKeys = event.characters, pressedKeys.count == 1 {
             let pressedKey = (pressedKeys as NSString).character(at: 0)
             // give app controller preference when handling commands
             if NSApp.appController.handleKeyDown(pressedKey, withFlags: event.modifierFlags.rawValue) {
@@ -140,9 +152,9 @@ class WebKitArticleView: CustomWKWebView, ArticleContentView, WKNavigationDelega
         }
         switch menuItem.identifier {
         case NSUserInterfaceItemIdentifier.WKMenuItemOpenLinkInBackground:
-            _ = NSApp.appController.browser.createNewTab(url, inBackground: true, load: true)
+            NSApp.appController.browser.createNewTab(url, inBackground: true, load: true)
         case NSUserInterfaceItemIdentifier.WKMenuItemOpenLinkInNewWindow, NSUserInterfaceItemIdentifier.WKMenuItemOpenImageInNewWindow, NSUserInterfaceItemIdentifier.WKMenuItemOpenMediaInNewWindow:
-            _ = NSApp.appController.browser.createNewTab(url, inBackground: false, load: true)
+            NSApp.appController.browser.createNewTab(url, inBackground: false, load: true)
         case NSUserInterfaceItemIdentifier.WKMenuItemOpenLinkInSystemBrowser:
             NSApp.appController.openURL(inDefaultBrowser: url)
         case NSUserInterfaceItemIdentifier.WKMenuItemDownloadImage, NSUserInterfaceItemIdentifier.WKMenuItemDownloadMedia, NSUserInterfaceItemIdentifier.WKMenuItemDownloadLinkedFile:

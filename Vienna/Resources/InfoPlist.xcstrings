@@ -15,7 +15,6 @@
     },
     "NSAppleEventsUsageDescription" : {
       "comment" : "A message that tells the user why Vienna is requesting the ability to send Apple events.",
-      "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -32,7 +31,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "© 2004–2023 The Vienna RSS Project"
+            "value" : "© 2004–2024 The Vienna RSS Project"
           }
         }
       }
@@ -74,6 +73,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Documento OPML"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Документ OPML"
           }
         },
         "sv" : {

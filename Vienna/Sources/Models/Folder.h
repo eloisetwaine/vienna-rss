@@ -21,6 +21,7 @@
 @import Cocoa;
 
 @class Article;
+@class ArticleReference;
 
 /**
  Folder types
@@ -76,7 +77,7 @@ typedef NS_OPTIONS(NSUInteger, VNAFolderFlag) {
 @property (nonatomic, copy) NSString *feedDescription;
 @property (nonatomic, copy) NSString *homePage;
 @property (nonatomic, copy) NSString *feedURL;
-@property (nonatomic, copy) NSDate *lastUpdate;
+@property (nonatomic) NSDate *lastUpdate;
 @property (nonatomic, copy) NSString *lastUpdateString;
 @property (nonatomic, copy) NSString *username;
 @property (nonatomic, copy) NSString *password;
@@ -112,11 +113,12 @@ typedef NS_OPTIONS(NSUInteger, VNAFolderFlag) {
 -(void)clearNonPersistedFlag:(VNAFolderFlag)flagToClear;
 -(NSUInteger)indexOfArticle:(Article *)article;
 -(Article *)articleFromGuid:(NSString *)guid;
+-(NSInteger)retrieveKnownStatusForGuid:(NSString *)guid;
 -(BOOL)createArticle:(Article *)article guidHistory:(NSArray *)guidHistory;
 -(void)removeArticleFromCache:(NSString *)guid;
--(void)restoreArticleToCache:(Article *)article;
 -(void)markArticlesInCacheRead;
--(NSArray *)arrayOfUnreadArticlesRefs;
+-(void)resetArticleStatuses;
+-(NSArray<ArticleReference *> *)arrayOfUnreadArticlesRefs;
 -(NSComparisonResult)folderNameCompare:(Folder *)otherObject;
 -(NSComparisonResult)folderIDCompare:(Folder *)otherObject;
 @property (readonly, nonatomic) NSString *feedSourceFilePath;

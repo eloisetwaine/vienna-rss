@@ -137,7 +137,11 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
                  @"Vienna may not work as expected if the database is corrupted. We recommend you quit Vienna and either restore the database (%@) from a backup or attempt a sqlite3 recovery.",
                  @"Informative text of an alert"),
              self.databaseQueue.path.lastPathComponent];
-        [alert addButtonWithTitle:NSLocalizedString(@"Quit Vienna", @"Button to quit Vienna after a database check")];
+        [alert addButtonWithTitle:NSLocalizedStringWithDefaultValue(@"quitVienna.button",
+                                                                    nil,
+                                                                    NSBundle.mainBundle,
+                                                                    @"Quit Vienna",
+                                                                    @"Button to quit Vienna after a database check")];
         [alert addButtonWithTitle:NSLocalizedString(@"Continue Anyway",
                                                     @"Button to continue running Vienna despite an unsuccessful check")];
         NSInteger modalReturn = [alert runModal];
@@ -160,7 +164,11 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
         [alert setMessageText:NSLocalizedString(@"Database Upgrade", nil)];
         [alert setInformativeText:NSLocalizedString(@"Vienna must upgrade its database to the latest version. This may take a minute or so. We apologize for the inconvenience.", nil)];
         [alert addButtonWithTitle:NSLocalizedString(@"Upgrade Database", @"Title of a button on an alert")];
-        [alert addButtonWithTitle:NSLocalizedString(@"Quit Vienna", @"Button to quit Vienna after a database check")];
+        [alert addButtonWithTitle:NSLocalizedStringWithDefaultValue(@"quitVienna.button",
+                                                                    nil,
+                                                                    NSBundle.mainBundle,
+                                                                    @"Quit Vienna",
+                                                                    @"Button to quit Vienna after a database check")];
         NSInteger modalReturn = [alert runModal];
         if (modalReturn == NSAlertSecondButtonReturn) {
             return NO;
@@ -241,7 +249,7 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
     [self createInitialSmartFolder:NSLocalizedString(@"Unread Articles", nil) withCriteria:unreadCriteria];
     
     // Create a criteria to show all articles received today
-    Criteria * todayCriteria = [[Criteria alloc] initWithField:MA_Field_Date operatorType:VNACriteriaOperatorEqualTo value:@"today"];
+    Criteria * todayCriteria = [[Criteria alloc] initWithField:MA_Field_LastUpdate operatorType:VNACriteriaOperatorEqualTo value:@"today"];
     [self createInitialSmartFolder:NSLocalizedString(@"Today's Articles", nil) withCriteria:todayCriteria];
     
 	[self.databaseQueue inDatabase:^(FMDatabase *db) {
@@ -276,10 +284,11 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
     
     // If we have a DemoFeeds.plist in the resources then use it to create some initial demo
     // RSS feeds.
-    NSBundle *thisBundle = [NSBundle bundleForClass:[self class]];
-    NSString * pathToPList = [thisBundle pathForResource:@"DemoFeeds.plist" ofType:@""];
-    if (pathToPList != nil) {
-        NSDictionary * demoFeedsDict = [NSDictionary dictionaryWithContentsOfFile:pathToPList];
+    NSURL *plistURL = [NSBundle.mainBundle URLForResource:@"DemoFeeds"
+                                            withExtension:@"plist"];
+    if (plistURL) {
+        NSDictionary *demoFeedsDict = [NSDictionary dictionaryWithContentsOfURL:plistURL
+                                                                          error:NULL];
         if (demoFeedsDict) {
             for (NSString * feedName in demoFeedsDict) {
                 NSDictionary * itemDict = demoFeedsDict[feedName];
@@ -328,22 +337,23 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
     self.fieldsByName = [[NSMutableDictionary alloc] init];
     self.fieldsOrdered = [[NSMutableArray alloc] init];
     
-    [self addField:MA_Field_Read type:VNAFieldTypeFlag tag:ArticleFieldIDRead sqlField:@"read_flag" visible:YES width:17];
-    [self addField:MA_Field_Flagged type:VNAFieldTypeFlag tag:ArticleFieldIDFlagged sqlField:@"marked_flag" visible:YES width:17];
-    [self addField:MA_Field_HasEnclosure type:VNAFieldTypeFlag tag:ArticleFieldIDHasEnclosure sqlField:@"hasenclosure_flag" visible:YES width:17];
-    [self addField:MA_Field_Deleted type:VNAFieldTypeFlag tag:ArticleFieldIDDeleted sqlField:@"deleted_flag" visible:NO width:15];
-    [self addField:MA_Field_GUID type:VNAFieldTypeInteger tag:ArticleFieldIDGUID sqlField:@"message_id" visible:NO width:72];
-    [self addField:MA_Field_Subject type:VNAFieldTypeString tag:ArticleFieldIDSubject sqlField:@"title" visible:YES width:472];
-    [self addField:MA_Field_Folder type:VNAFieldTypeFolder tag:ArticleFieldIDFolder sqlField:@"folder_id" visible:NO width:130];
-    [self addField:MA_Field_Date type:VNAFieldTypeDate tag:ArticleFieldIDDate sqlField:@"date" visible:YES width:152];
-    [self addField:MA_Field_Parent type:VNAFieldTypeInteger tag:ArticleFieldIDParent sqlField:@"parent_id" visible:NO width:72];
-    [self addField:MA_Field_Author type:VNAFieldTypeString tag:ArticleFieldIDAuthor sqlField:@"sender" visible:YES width:138];
-    [self addField:MA_Field_Link type:VNAFieldTypeString tag:ArticleFieldIDLink sqlField:@"link" visible:NO width:138];
-    [self addField:MA_Field_Text type:VNAFieldTypeString tag:ArticleFieldIDText sqlField:@"text" visible:NO width:152];
-    [self addField:MA_Field_Summary type:VNAFieldTypeString tag:ArticleFieldIDSummary sqlField:@"summary" visible:NO width:152];
-    [self addField:MA_Field_Headlines type:VNAFieldTypeString tag:ArticleFieldIDHeadlines sqlField:@"" visible:NO width:100];
-    [self addField:MA_Field_Enclosure type:VNAFieldTypeString tag:ArticleFieldIDEnclosure sqlField:@"enclosure" visible:NO width:100];
-    [self addField:MA_Field_EnclosureDownloaded type:VNAFieldTypeFlag tag:ArticleFieldIDEnclosureDownloaded sqlField:@"enclosuredownloaded_flag" visible:NO width:100];
+    [self addField:MA_Field_Read type:VNAFieldTypeFlag tag:VNAArticleFieldTagRead sqlField:@"read_flag" visible:YES width:17];
+    [self addField:MA_Field_Flagged type:VNAFieldTypeFlag tag:VNAArticleFieldTagFlagged sqlField:@"marked_flag" visible:YES width:17];
+    [self addField:MA_Field_HasEnclosure type:VNAFieldTypeFlag tag:VNAArticleFieldTagHasEnclosure sqlField:@"hasenclosure_flag" visible:YES width:17];
+    [self addField:MA_Field_Deleted type:VNAFieldTypeFlag tag:VNAArticleFieldTagDeleted sqlField:@"deleted_flag" visible:NO width:15];
+    [self addField:MA_Field_GUID type:VNAFieldTypeInteger tag:VNAArticleFieldTagGUID sqlField:@"message_id" visible:NO width:72];
+    [self addField:MA_Field_Subject type:VNAFieldTypeString tag:VNAArticleFieldTagSubject sqlField:@"title" visible:YES width:472];
+    [self addField:MA_Field_Folder type:VNAFieldTypeFolder tag:VNAArticleFieldTagFolder sqlField:@"folder_id" visible:NO width:130];
+    [self addField:MA_Field_LastUpdate type:VNAFieldTypeDate tag:VNAArticleFieldTagLastUpdate sqlField:@"date" visible:YES width:152];
+    [self addField:MA_Field_PublicationDate type:VNAFieldTypeDate tag:VNAArticleFieldTagPublicationDate sqlField:@"createddate" visible:NO width:152];
+    [self addField:MA_Field_Parent type:VNAFieldTypeInteger tag:VNAArticleFieldTagParent sqlField:@"parent_id" visible:NO width:72];
+    [self addField:MA_Field_Author type:VNAFieldTypeString tag:VNAArticleFieldTagAuthor sqlField:@"sender" visible:YES width:138];
+    [self addField:MA_Field_Link type:VNAFieldTypeString tag:VNAArticleFieldTagLink sqlField:@"link" visible:NO width:138];
+    [self addField:MA_Field_Text type:VNAFieldTypeString tag:VNAArticleFieldTagText sqlField:@"text" visible:NO width:152];
+    [self addField:MA_Field_Summary type:VNAFieldTypeString tag:VNAArticleFieldTagSummary sqlField:@"summary" visible:NO width:152];
+    [self addField:MA_Field_Headlines type:VNAFieldTypeString tag:VNAArticleFieldTagHeadlines sqlField:@"" visible:NO width:100];
+    [self addField:MA_Field_Enclosure type:VNAFieldTypeString tag:VNAArticleFieldTagEnclosure sqlField:@"enclosure" visible:NO width:100];
+    [self addField:MA_Field_EnclosureDownloaded type:VNAFieldTypeFlag tag:VNAArticleFieldTagEnclosureDownloaded sqlField:@"enclosuredownloaded_flag" visible:NO width:100];
 
 	//set user friendly and localizable names for some fields
 	[self fieldByName:MA_Field_Read].displayName = NSLocalizedString(@"Read", @"Data field name visible in menu/smart folder definition");
@@ -353,7 +363,8 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
 	[self fieldByName:MA_Field_Deleted].displayName = NSLocalizedString(@"Deleted", @"Data field name visible in smart folder definition");
 	[self fieldByName:MA_Field_Subject].displayName = NSLocalizedString(@"Subject", @"Data field name visible in menu/article list/smart folder definition");
 	[self fieldByName:MA_Field_Folder].displayName = NSLocalizedString(@"Folder", @"Data field name visible in menu/article list/smart folder definition");
-	[self fieldByName:MA_Field_Date].displayName = NSLocalizedString(@"Date", @"Data field name visible in menu/article list/smart folder definition");
+	[self fieldByName:MA_Field_LastUpdate].displayName = NSLocalizedString(@"Last Update", @"Data field name visible in menu/article list/smart folder definition");
+	[self fieldByName:MA_Field_PublicationDate].displayName = NSLocalizedString(@"Date Published", @"Data field name visible in menu/article list/smart folder definition");
 	[self fieldByName:MA_Field_Author].displayName = NSLocalizedString(@"Author", @"Data field name visible in menu/article list/smart folder definition");
 	[self fieldByName:MA_Field_Text].displayName = NSLocalizedString(@"Text", @"Data field name visible in smart folder definition");
 	[self fieldByName:MA_Field_Summary].displayName = NSLocalizedString(@"Summary", @"Pseudo field name visible in menu/article list");
@@ -374,7 +385,11 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
     alert.messageText = NSLocalizedString(@"Cannot create the Vienna database", nil);
     alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"A new Vienna database cannot be created at \"%@\" because the folder is probably located on a remote network share and this version of Vienna cannot manage remote databases. Please choose an alternative folder that is located on your local machine.", nil), path];
     [alert addButtonWithTitle:NSLocalizedString(@"Locate…", @"Title of a button on an alert")];
-    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Title of a button on an alert")];
+    [alert addButtonWithTitle:NSLocalizedStringWithDefaultValue(@"cancel.button",
+                                                                nil,
+                                                                NSBundle.mainBundle,
+                                                                @"Cancel",
+                                                                @"Title of a button on an alert")];
     NSModalResponse alertResponse = [alert runModal];
 
     // When the cancel button is pressed.
@@ -1506,7 +1521,6 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
     // Extract the article data from the dictionary.
     NSString * articleBody = article.body;
     NSString * articleTitle = article.title;
-    NSDate * articleDate = article.date;
     NSString * articleLink = article.link.vna_trimmed;
     NSString * userName = article.author.vna_trimmed;
     NSString * articleEnclosure = article.enclosure.vna_trimmed;
@@ -1518,13 +1532,29 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
     BOOL deleted_flag = article.deleted;
     BOOL hasenclosure_flag = article.hasEnclosure;
 
-    // We always set the created date ourselves
-    article.createdDate = [NSDate date];
+    NSDate *currentDate = [NSDate date];
+
+    // use the given publication date if it is contained in the feed, or the earliest date available
+    NSDate * publicationDate = article.publicationDate;
+    if (!publicationDate) {
+        publicationDate = article.lastUpdate && [article.lastUpdate isLessThan:currentDate]
+                                   ? article.lastUpdate 
+                                   : currentDate;
+        article.publicationDate = publicationDate;
+    }
+
+    // if a last update date is not provided, use our publication date
+    NSDate * lastUpdate = article.lastUpdate;
+    if (!lastUpdate) {
+        lastUpdate = publicationDate;
+        article.lastUpdate = lastUpdate;
+    }
+
+    // Dates are stored as time intervals
+    NSTimeInterval lastUpdateIntervalSince1970 = lastUpdate.timeIntervalSince1970;
+    NSTimeInterval publicationIntervalSince1970 = publicationDate.timeIntervalSince1970;
 
     // Set some defaults
-    if (articleDate == nil) {
-        articleDate = [NSDate date];
-    }
     if (userName == nil) {
         userName = @"";
     }
@@ -1534,10 +1564,6 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
         articleTitle = [NSString vna_stringByRemovingHTML:articleBody].vna_firstNonBlankLine;
     }
 
-    // Dates are stored as time intervals
-    NSTimeInterval interval = articleDate.timeIntervalSince1970;
-    NSTimeInterval createdInterval = article.createdDate.timeIntervalSince1970;
-    
     __block BOOL success;
     [queue inTransaction:^(FMDatabase *db,  BOOL *rollback) {
         success = [db executeUpdate:@"INSERT INTO messages (message_id, parent_id, folder_id, sender, link, date, createddate, read_flag, marked_flag, deleted_flag, title, text, revised_flag, enclosure, hasenclosure_flag) "
@@ -1547,8 +1573,8 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
          @(folderID),
          userName,
          articleLink,
-         @(interval),
-         @(createdInterval),
+         @(lastUpdateIntervalSince1970),
+         @(publicationIntervalSince1970),
          @(read_flag),
          @(marked_flag),
          @(deleted_flag),
@@ -1591,17 +1617,28 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
     // Extract the data from the new state of article
     NSString * articleBody = article.body;
     NSString * articleTitle = article.title;
-    NSDate * articleDate = article.date;
     NSString * articleLink = article.link.vna_trimmed;
     NSString * userName = article.author.vna_trimmed;
     NSString * articleGuid = article.guid;
     NSInteger parentId = article.parentId;
     BOOL revised_flag = article.revised;
 
-    // Set some defaults
-    if (articleDate == nil) {
-        articleDate = existingArticle.date;
+    // keep last update date the same if not set in the current version of the article
+    NSDate * lastUpdate = article.lastUpdate && [article.lastUpdate isGreaterThan:existingArticle.lastUpdate]
+                            ? article.lastUpdate
+                            : existingArticle.lastUpdate;
+
+    // we never change the publication date, unless the date provided in the feed is prior to it
+    NSDate * publicationDate = existingArticle.publicationDate;
+    if (article.publicationDate && [article.publicationDate isLessThan:existingArticle.publicationDate]) {
+        publicationDate = article.publicationDate;
     }
+
+    // Dates are stored as time intervals
+    NSTimeInterval lastUpdateIntervalSince1970 = lastUpdate.timeIntervalSince1970;
+    NSTimeInterval publicationIntervalSince1970 = publicationDate.timeIntervalSince1970;
+
+    // Set some defaults
     if (userName == nil) {
         userName = @"";
     }
@@ -1610,9 +1647,6 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
     if (articleTitle == nil || articleTitle.vna_isBlank) {
         articleTitle = [NSString vna_stringByRemovingHTML:articleBody].vna_firstNonBlankLine;
     }
-
-    // Dates are stored as time intervals
-    NSTimeInterval interval = articleDate.timeIntervalSince1970;
 
     // The article is revised if either the title or the body has changed.
 
@@ -1646,12 +1680,13 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
 
         __block BOOL success;
         [queue inDatabase:^(FMDatabase *db) {
-            success = [db executeUpdate:@"UPDATE messages SET parent_id=?, sender=?, link=?, date=?, "
+            success = [db executeUpdate:@"UPDATE messages SET parent_id=?, sender=?, link=?, date=?, createddate=?, "
              @"read_flag=0, title=?, text=?, revised_flag=? WHERE folder_id=? AND message_id=?",
              @(parentId),
              userName,
              articleLink,
-             @(interval),
+             @(lastUpdateIntervalSince1970),
+             @(publicationIntervalSince1970),
              articleTitle,
              articleBody,
              @(revised_flag),
@@ -2149,7 +2184,7 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
  * articles in the specified folder.
  * Note : when possible, you should use the interface provided by the Folder class instead of this
  */
--(NSArray *)arrayOfUnreadArticlesRefs:(NSInteger)folderId
+-(NSArray<ArticleReference *> *)arrayOfUnreadArticlesRefs:(NSInteger)folderId
 {
 	Folder * folder = [self folderFromID:folderId];
 	if (folder != nil) {
@@ -2217,7 +2252,8 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
 			results = [db executeQuery:queryString, filterString, filterString];
 		}
 		while ([results next]) {
-			Article * article = [[Article alloc] initWithGuid:[results stringForColumnIndex:0]];
+			NSString * guid = [results stringForColumnIndex:0];
+			Article * article = [[Article alloc] initWithGuid:guid];
 			article.folderId = [results intForColumnIndex:1];
 			article.parentId = [results intForColumnIndex:2];
 			[article markRead:[results intForColumnIndex:3]];
@@ -2226,13 +2262,15 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
 			article.title = [results stringForColumnIndex:6];
 			article.author = [results stringForColumnIndex:7];
 			article.link = [results stringForColumnIndex:8];
-			article.createdDate = [NSDate dateWithTimeIntervalSince1970:[results stringForColumnIndex:9].doubleValue];
-			article.date = [NSDate dateWithTimeIntervalSince1970:[results stringForColumnIndex:10].doubleValue];
+			article.publicationDate = [NSDate dateWithTimeIntervalSince1970:[results stringForColumnIndex:9].doubleValue];
+			article.lastUpdate = [NSDate dateWithTimeIntervalSince1970:[results stringForColumnIndex:10].doubleValue];
 			NSString * text = [results stringForColumnIndex:11];
 			article.body = text;
 			[article markRevised:[results intForColumnIndex:12]];
 			article.hasEnclosure = [results intForColumnIndex:13];
 			article.enclosure = [results stringForColumnIndex:14];
+			Folder * articleFolder = [self folderFromID:article.folderId];
+			article.status = [articleFolder retrieveKnownStatusForGuid:guid];
 		
 			if (folder == nil || !article.deleted || folder.type == VNAFolderTypeTrash) {
 				[newArray addObject:article];
@@ -2308,6 +2346,7 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
 	Folder * folder = [self folderFromID:folderId];
 	if (folder != nil) {
 		Article * article = [folder articleFromGuid:guid];
+		[article beginContentAccess];
 		if (article != nil && isRead != article.read) {
 			// Mark an individual article read
             FMDatabaseQueue *queue = self.databaseQueue;
@@ -2323,6 +2362,7 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
 				[self setFolderUnreadCount:folder adjustment:adjustment];
 			}
 		}
+		[article endContentAccess];
 	}
 }
 
@@ -2403,6 +2443,7 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
 	Folder * folder = [self folderFromID:folderId];
 	if (folder != nil) {
 		Article * article = [folder articleFromGuid:guid];
+		[article beginContentAccess];
 		if (article != nil && isFlagged != article.flagged) {
             FMDatabaseQueue *queue = self.databaseQueue;
             __block BOOL success;
@@ -2418,6 +2459,7 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
                 [article markFlagged:isFlagged];
 			}
 		}
+		[article endContentAccess];
 	}
 }
 
@@ -2440,19 +2482,13 @@ NSNotificationName const VNADatabaseDidDeleteFolderNotification = @"Database Did
              @(folderId),
              guid];
         }];
-        if (isDeleted && !article.deleted) {
-            [article markDeleted:YES];
-            if (folder.countOfCachedArticles > 0) {
-				// If we're in a smart folder, the cached article may be different.
-				Article * cachedArticle = [folder articleFromGuid:guid];
-				[cachedArticle markDeleted:YES];
-				[folder removeArticleFromCache:guid];
-			}
-        } else if (!isDeleted) {
-            // if we undelete, allow the RSS or OpenReader folder
-            // to get the restored article 
-            [folder restoreArticleToCache:article];
-            [article markDeleted:NO];
+        [article markDeleted:isDeleted];
+        if (folder.countOfCachedArticles > 0) {
+            // If we're in a smart folder, the cached article may be different.
+            Article * cachedArticle = [folder articleFromGuid:guid];
+            [cachedArticle beginContentAccess];
+            [cachedArticle markDeleted:isDeleted];
+            [cachedArticle endContentAccess];
         }
 	}
 }
